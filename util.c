@@ -2,6 +2,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 int idx2_rowmajor(int n, int m, int i, int j) {
   assert(i >= 0 && i < n);
@@ -9,13 +10,28 @@ int idx2_rowmajor(int n, int m, int i, int j) {
   return i * m + j;
 }
 
+double sumvec (int n , const double *vector) {
+double sum = 0 ;
+ for ( int i = 0 ; i < n ; i ++) {
+   sum += vector[ i ] ;
+ }
+ return sum ;
+}
+
+void sumrows ( int n , int m, const double *matrix , double *vector ) {
+for (int i = 0; i < n; i ++) {
+  vector[i] = sumvec(m, &matrix[i *m] ) ;
+ }
+}
+
+
+
 double distance(int d, const double *x, const double *y) {
   double result = 0.0;
   double a;
   for (int i = 0; i < d; i++){
     a = (y[i] - x[i]) * (y[i] - x[i]);
-    result = result + a;
-			      
+    result = result + a;			      
   }	    
   return sqrt(result);
 }
@@ -23,8 +39,9 @@ double distance(int d, const double *x, const double *y) {
 int insert_if_closer(int k, int d,
                      const double *points, int *closest, const double *query,
                      int candidate) {
-
-  double dist = distance(d, points, query);
+  double candivec[d];
+  //memcpy(candivec, &points[candidate * d], d);
+  double dist = distance(d,candivec, query);
   if (dist < distance(d, points, query) || closest[0] == -1) {
     for ( int i = 0; i < k; i++){
       double temp = closest[i];
@@ -50,9 +67,11 @@ int main(){
   int closest[] = {-1, -1, -1};
   double query[] = {points[1]};
   int candidate = 2;
+  double new[2];
 
   insert_if_closer(k, d, points, closest, query, candidate);
   printf("%d\n",closest[0]);
-  printf("%d\n", idx2_rowmajor(2, 5, 1, 3));
+  
+  
   return 0;
 }
