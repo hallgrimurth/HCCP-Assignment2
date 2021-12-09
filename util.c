@@ -40,7 +40,8 @@ int insert_if_closer(int k, int d,
                      const double *points, int *closest, const double *query,
                      int candidate) {
   double candivec[d];
-  //memcpy(candivec, &points[candidate * d], d);
+  memcpy(candivec, &points[candidate], d*sizeof(double));
+  printf("%f %f %f\n", candivec[0], candivec[1], candivec[2]);
   double dist = distance(d,candivec, query);
   if (dist < distance(d, points, query) || closest[0] == -1) {
     for ( int i = 0; i < k; i++){
@@ -57,8 +58,8 @@ int insert_if_closer(int k, int d,
 int main(){
 
   int k = 1;
-  double x[] = {1.0, 2.0, 2.0};
-  double y[] = {10.0, 3.0, 5,0};
+  double x[] = {1.0, 2.0, 2.0, 5.0};
+  double y[] = {10.0, 3.0, 5,0, 20.0};
   double a = distance(3, x, y);
   printf("%f\n",a);
 
